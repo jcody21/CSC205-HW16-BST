@@ -1,0 +1,56 @@
+//
+// The  showLinks()  method is not in good shape -- please ignore.  
+// Known problems:
+// + choose PRINT on new window and  window.document  prints...
+// + file name/method name inconsistency...
+// + indexOf() doesn't appear to be working...
+// + checking for  top  needs to use a  basename  type of function...
+//
+// @author g.d.thurman
+// @version 1999.12.04
+//
+
+function showLinks() {
+   var wdw = window.open('', 'newWin', 
+               'toolbar=yes,location=no,width=480,height=320,' +
+               'resizable=yes,scrollbars=yes');
+   wdw.document.write("<html><body>");
+   for (var i = 0; i < document.links.length; i++) {
+      var txt = document.links[i].text;
+      if (txt != null) {
+         if (txt.indexOf("#") != -1) continue;  //is anchor... 
+            // thurmunit specific checks...
+         if (txt == "top" || txt == "[top]") continue;
+         if (txt == "Previous" || txt == "Next") continue;
+      }
+      wdw.document.write('<a href="' + document.links[i].href + '">' + 
+                         (txt == null ? "[IMG]" : txt) +
+                         '</a> [' + document.links[i].href + '] <br />');
+   }
+   wdw.document.write("</body></html>");
+   return true;
+}
+
+//
+// If you create a method with the same name as the event handler,
+// then that method is called when the event is fired.
+//
+// Problem:  What if application-specific processing needs to be
+//           done when onLoad event occurs?  Problem even more
+//           prevalent with onClick events.
+//
+// @author g.d.thurman
+// @version 2000.04.15
+//
+function onLoad() {
+   if (parent.frames[0] == null) return true;
+   parent.frames[0].document.egform.thetext.value = "ThurmUnit Stuff";
+   return true;
+}
+
+function myOnClick(txt) {
+   if (txt == "") txt = "*** External Resource Framed ***";
+   parent.frames[0].document.egform.thetext.value = txt;
+   return true;
+}
+
